@@ -42,8 +42,12 @@ var createTaskEl = function(taskDataObj) {
   taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
   listItemEl.appendChild(taskInfoEl);
 
+  // create button call
   var taskActionsEl = createTaskActions(taskIdCounter);
-  console.log(taskActionsEl);
+  // add them to li item
+  listItemEl.appendChild(taskActionsEl);
+
+
   // add entire li item to ul
   tasksToDoEl.appendChild(listItemEl);
 
@@ -53,6 +57,7 @@ var createTaskEl = function(taskDataObj) {
 
 // dynamically create buttons
 var createTaskActions = function(taskId) {
+  // create a container 
   var actionContainerEl = document.createElement("div");
   actionContainerEl.className = "task-actions";
 
