@@ -1,7 +1,11 @@
+// reference to form
 var formEl = document.querySelector("#task-form");
+// reference to "tasks to do" ul
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 // for referencing task id's
 var taskIdCounter = 0;
+// reference to <main>
+var pageContentEl = document.querySelector("#page-content");
 
 var taskFormHandler = function(event) {
 // prevents the page from reloading
@@ -103,3 +107,20 @@ var createTaskActions = function(taskId) {
 // submit event is form specific, activates when enter is pressed or when a 
 // button with type="submit" within the form is pressed
 formEl.addEventListener("submit", taskFormHandler);
+
+var deleteTask = function(taskId) {
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+  taskSelected.remove();
+};
+
+var taskButtonHandler = function(event) {
+  console.log(event.target);
+
+  if (event.target.matches(".delete-btn")) {
+    // get the button's task id
+    var taskId = event.target.getAttribute("data-task-id");
+    deleteTask(taskId);
+  }
+};
+
+pageContentEl.addEventListener("click", taskButtonHandler);
