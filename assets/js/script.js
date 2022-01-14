@@ -7,8 +7,9 @@ var taskIdCounter = 0;
 // reference to <main>
 var pageContentEl = document.querySelector("#page-content");
 
+// controls the form
 var taskFormHandler = function(event) {
-// prevents the page from reloading
+  // prevents the page from reloading
   event.preventDefault();
 
   var taskNameInput = document.querySelector("input[name='task-name']").value;
@@ -20,13 +21,24 @@ var taskFormHandler = function(event) {
   };
   // reset data in form
   formEl.reset();
-  // package data as an object
-  var taskDataObj = {
-    name: taskNameInput,
-    type: taskTypeInput
-  };
-  // send it as an argument to createTaskEl
-  createTaskEl(taskDataObj);
+
+  // check to see if we are editing or creating a task
+  var isEdit = formEl.hasAttribute("data-task-id");
+  
+  // has data attribute, so get task id and call function to complete edit process
+  if (isEdit) {
+    var taskId = formEl.getAttribute("data-task-id");
+    completeEditTask(taskNameInput, taskTypeInput, taskId);
+  } // no data attribute, so create object as normal and pass to createTaskEl function
+  else {
+    // package data as an object
+    var taskDataObj = {
+      name: taskNameInput,
+      type: taskTypeInput
+    };
+    // send it as an argument to createTaskEl
+    createTaskEl(taskDataObj);
+  }
 };
 
 // function to create html elements and add them to the list as a new task
@@ -108,6 +120,7 @@ var createTaskActions = function(taskId) {
 // button with type="submit" within the form is pressed
 formEl.addEventListener("submit", taskFormHandler);
 
+// send off info for the task we are editing
 var editTask = function(taskId) {
   // get task list item element
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -127,6 +140,24 @@ var editTask = function(taskId) {
   formEl.setAttribute("data-task-id", taskId);
 };
 
+// finish editing a task
+var completeEditTask = function(taskName, taskType, taskId) {
+  // find the matching task list item
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+  // set new values
+  taskSelected.querySelector("h3.task-name").textContent = taskName;
+  taskSelected.querySelector("span.task-type").textContent = taskType;
+
+  alert("Task Updated!");
+
+  // remove data-task-id so form can create new tasks again
+  formEl.removeAttribute("data-task-id");
+  // change text on the form button back
+  document.querySelector("#save-task").textContent = "Add Task";
+};
+
+// remove a task
 var deleteTask = function(taskId) {
   // finds the list element with a class of .task-item AND attribute data-task-id
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
