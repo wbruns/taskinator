@@ -71,6 +71,9 @@ var createTaskEl = function(taskDataObj) {
   // add taskDataObj to tasks array
   tasks.push(taskDataObj);
 
+  //save
+  saveTasks();
+
   // create button call
   var taskActionsEl = createTaskActions(taskIdCounter);
   // add them to li item
@@ -82,9 +85,6 @@ var createTaskEl = function(taskDataObj) {
 
   // increase task counter for next unique id
   taskIdCounter++;
-
-  console.log(taskDataObj);
-  console.log(taskDataObj.status);
 };
 
 // dynamically create buttons/status select
@@ -148,6 +148,8 @@ var completeEditTask = function(taskName, taskType, taskId) {
       tasks[i].type = taskType;
     }
   };
+  // save
+  saveTasks();
 
   alert("Task Updated!");
 
@@ -205,7 +207,8 @@ var taskStatusChangeHandler = function(event) {
       tasks[i].status = statusValue;
     }
   };
-  console.log(tasks);
+  // save
+  saveTasks();
 };
 
 // send off info for the task we are editing
@@ -247,6 +250,13 @@ var deleteTask = function(taskId) {
 
   // reassign tasks array to be the same as updatedTaskArr
   tasks = updatedTaskArr;
+  // save
+  saveTasks();
+};
+
+// for saving tasks to localStorage
+var saveTasks = function() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
 // submit event is form specific, activates when enter is pressed or when a 
