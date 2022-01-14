@@ -6,6 +6,10 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
 var taskIdCounter = 0;
 // reference to <main>
 var pageContentEl = document.querySelector("#page-content");
+// reference to tasks in progress list
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+// reference to tasks completed list
+var tasksCompletedEl = document.querySelector("#tasks-completed");
 
 // controls the form
 var taskFormHandler = function(event) {
@@ -71,7 +75,7 @@ var createTaskEl = function(taskDataObj) {
   taskIdCounter++;
 };
 
-// dynamically create buttons
+// dynamically create buttons/status select
 var createTaskActions = function(taskId) {
   // create a container 
   var actionContainerEl = document.createElement("div");
@@ -164,6 +168,7 @@ var deleteTask = function(taskId) {
   taskSelected.remove();
 };
 
+// when a button is clicked
 var taskButtonHandler = function(event) {
   // get target element from event
   var targetEl = event.target;
@@ -181,4 +186,32 @@ var taskButtonHandler = function(event) {
   }
 };
 
+// when there is a change in task status
+var taskStatusChangeHandler = function(event) {
+  // get the task item's id
+  var taskId = event.target.getAttribute("data-task-id");
+
+  // get the currently selected option's value and convert to lowercase
+  // lowercase is futureproofing in case we change how status text is displayed
+  var statusValue = event.target.value.toLowerCase();
+
+  // find the parent task item element based on the id
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+  // move the task
+  if (statusValue === "to do") {
+    // move to To Do column
+    tasksToDoEl.appendChild(taskSelected);
+  } else if (statusValue === "in progress") {
+    // move to In Progress column
+    tasksInProgressEl.appendChild(taskSelected);
+  } else if (statusValue === "completed") {
+    // move to Completed column
+    tasksCompletedEl.appendChild(taskSelected);
+  }
+};
+
+// click event for <main>
 pageContentEl.addEventListener("click", taskButtonHandler);
+// change event for tast status
+pageContentEl.addEventListener("change", taskStatusChangeHandler);
