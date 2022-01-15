@@ -256,7 +256,41 @@ var deleteTask = function(taskId) {
 
 // for saving tasks to localStorage
 var saveTasks = function() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+// for loading tasks from localStorage
+var loadTasks = function() {
+  // get task items from local storage
+  tasks = localStorage.getItem("tasks", tasks);
+    if (!tasks) {
+    tasks = [];
+    return false;
+  }
+  // convert tasks from string format back into an array of objects
+  tasks = JSON.parse(tasks);
+  // iterate through a tasks array and create task elements on the page from it
+  for (var i = 0; i < tasks.length; i++) {
+    // syncing task id's
+    taskIdCounter = tasks[i].id;
+    console.log(tasks[i]);
+    // create list item
+    listItemEl = document.createElement("li");
+    listItemEl.className = "task-item";
+    listItemEl.setAttribute("data-task-id", tasks[i].id);
+    console.log(listItemEl);
+    // create div element
+    taskInfoEl = document.createElement("div");
+    taskInfoEl.className = "task-info"
+    taskInfoEl.innerHTML = "<h3 class ='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+    listItemEl.appendChild(taskInfoEl);
+    // create actions for the task
+    taskActionsEl = createTaskActions(tasks[i].id);
+    listItemEl.appendChild(taskActionsEl);
+    console.log(listItemEl);
+  }
+  
+
 };
 
 // submit event is form specific, activates when enter is pressed or when a 
@@ -267,3 +301,5 @@ formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 // change event for task status
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+
+loadTasks();
