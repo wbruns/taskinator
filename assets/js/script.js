@@ -278,7 +278,6 @@ var loadTasks = function() {
     listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
     listItemEl.setAttribute("data-task-id", tasks[i].id);
-    console.log(listItemEl);
     // create div element
     taskInfoEl = document.createElement("div");
     taskInfoEl.className = "task-info"
@@ -288,9 +287,20 @@ var loadTasks = function() {
     taskActionsEl = createTaskActions(tasks[i].id);
     listItemEl.appendChild(taskActionsEl);
     console.log(listItemEl);
+    // check task status
+    if (tasks[i].status === "to do") {
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+      tasksToDoEl.appendChild(listItemEl);
+    } else if (tasks[i].status === "in progress") {
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+      tasksInProgressEl.appendChild(listItemEl);
+    } else if (tasks[i].status === "completed") {
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+      tasksCompletedEl.appendChild(listItemEl);
+    }
+    taskIdCounter++;
+    console.log(listItemEl);
   }
-  
-
 };
 
 // submit event is form specific, activates when enter is pressed or when a 
